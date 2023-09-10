@@ -1,0 +1,54 @@
+-- MySQL Script for Workshop Database
+
+-- Create the Client table
+CREATE TABLE IF NOT EXISTS `Cliente` (
+  `IDCliente` INT NOT NULL AUTO_INCREMENT,
+  `Nome` VARCHAR(100) NOT NULL,
+  `Endereco` VARCHAR(255) NOT NULL,
+  `Email` VARCHAR(100) NOT NULL,
+  `Telefone` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`IDCliente`)
+) ENGINE = InnoDB;
+
+-- Create the Veiculo table
+CREATE TABLE IF NOT EXISTS `Veiculo` (
+  `IDVeiculo` INT NOT NULL AUTO_INCREMENT,
+  `Marca` VARCHAR(50) NOT NULL,
+  `Modelo` VARCHAR(50) NOT NULL,
+  `AnoFabricacao` INT NOT NULL,
+  `Placa` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`IDVeiculo`)
+) ENGINE = InnoDB;
+
+-- Create the Servico table
+CREATE TABLE IF NOT EXISTS `Servico` (
+  `IDServico` INT NOT NULL AUTO_INCREMENT,
+  `Descricao` TEXT NOT NULL,
+  `Preco` DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY (`IDServico`)
+) ENGINE = InnoDB;
+
+-- Create the OrdemServico table
+CREATE TABLE IF NOT EXISTS `OrdemServico` (
+  `IDOrdemServico` INT NOT NULL AUTO_INCREMENT,
+  `IDCliente` INT NOT NULL,
+  `IDVeiculo` INT NOT NULL,
+  `DataEntrada` DATETIME NOT NULL,
+  `DataSaida` DATETIME NOT NULL,
+  `Status` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`IDOrdemServico`),
+  FOREIGN KEY (`IDCliente`) REFERENCES `Cliente` (`IDCliente`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`IDVeiculo`) REFERENCES `Veiculo` (`IDVeiculo`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
+-- Create the ItemServico table
+CREATE TABLE IF NOT EXISTS `ItemServico` (
+  `IDItemServico` INT NOT NULL AUTO_INCREMENT,
+  `IDOrdemServico` INT NOT NULL,
+  `IDServico` INT NOT NULL,
+  `Quantidade` INT NOT NULL,
+  `PrecoUnitario` DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY (`IDItemServico`),
+  FOREIGN KEY (`IDOrdemServico`) REFERENCES `OrdemServico` (`IDOrdemServico`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`IDServico`) REFERENCES `Servico` (`IDServico`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
